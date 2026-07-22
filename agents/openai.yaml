@@ -1,0 +1,4 @@
+interface:
+  display_name: "易语言开发"
+  short_description: "面向易语言工程的源码理解、编写、修改、排错与编译验证指南"
+  default_prompt: "Use $e-language to inspect, modify, and validate this 易语言 project safely."
