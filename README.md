@@ -42,6 +42,7 @@ npx skills add aiqinxuancai/e-language-skill
 | `references/patterns.md` | 可复用的正确示例与常见反例 |
 | `references/project-model.md` | 工程、易模块（`.ec`）、支持库（`.fne`）、页面与名称解析 |
 | `references/windows-and-interop.md` | 窗口/组件事件、Win32/DLL 声明、类型指针、编码、回调、线程 |
+| `references/embedded-machine-code.md` | `置入代码`、x86 机器码、栈帧/ABI、重定位边界与反汇编验证 |
 | `references/engineering-and-debugging.md` | 需求分析、编译错误分类、运行期排错、审查、测试、语言迁移 |
 | `references/autolinker-mcp.md` | AutoLinker MCP 工作流：刷新镜像、真实页读取、CAS 写入、编译 |
 | `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
@@ -57,6 +58,7 @@ npx skills add aiqinxuancai/e-language-skill
 ## 相关项目
 
 - [AutoLinker](https://github.com/aiqinxuancai/AutoLinker)：本技能中 AutoLinker MCP 工作流对应的易语言 IDE 插件。
+- [e-packager](https://github.com/aiqinxuancai/e-packager)：把二进制 `.e/.ec` 工程与可读文本工作区互相转换的第三方工具。
 
 ## 许可证
 

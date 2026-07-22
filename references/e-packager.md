@@ -2,6 +2,7 @@
 
 ## 目录
 
+- 项目与下载
 - 定位与适用场景
 - 能力总览
 - 解包
@@ -14,6 +15,13 @@
 - 版本与自更新
 - Agent 标准工作流
 - 限制与风险
+
+## 项目与下载
+
+- 项目地址：[aiqinxuancai/e-packager](https://github.com/aiqinxuancai/e-packager)
+- Release 下载页：[GitHub Releases](https://github.com/aiqinxuancai/e-packager/releases)
+
+在 Release 下载页打开最新版本，下载 `e-packager-<version>-windows-win32.zip` 并解压。e-packager 是便携式命令行工具，无需安装；可直接运行解压得到的 `e-packager.exe`，或将其所在目录加入 `PATH` 后使用本文命令。不要下载 GitHub 自动生成的 `Source code` 压缩包，它不包含可直接运行的程序。
 
 ## 定位与适用场景
 

@@ -1,6 +1,6 @@
 ---
 name: e-language
-description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, build errors, or conversions between 易语言 and other languages.
+description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
 ---
 
 # 易语言开发
@@ -39,6 +39,8 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 涉及窗口、组件事件、类、Win32 API、DLL、内存或回调时，再完整阅读 [windows-and-interop.md](references/windows-and-interop.md)。
 
+涉及 `置入代码`、内嵌汇编、机器码字节集、寄存器或栈帧时，必须完整阅读 [embedded-machine-code.md](references/embedded-machine-code.md)，并同时读取 [windows-and-interop.md](references/windows-and-interop.md)。先确认编译器、后端、目标位数和实际 ABI，再生成或修改机器码；不得照抄未反汇编验证的十进制字节。
+
 ### 排错、优化、审查或迁移
 
 必须阅读 [engineering-and-debugging.md](references/engineering-and-debugging.md)。迁移时还要读取语言与项目模型参考，以区分语言语义、支持库行为、UI 事件和平台互操作边界。
@@ -74,6 +76,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 - 控件事件必须留在所属窗口程序集，不能为了整理代码而移动到其他页。
 - 只修改某个子程序时，不重写整个页面，不重复添加 `.版本 2`。
 - 不确定某条命令是否存在时，搜索当前工程和依赖公开接口；不得发明“看起来合理”的中文命令。
+- 使用 `置入代码` 时，只提交可追溯到汇编源码或反汇编结果的常量机器码，并按目标编译模式验证最终产物中的指令、栈平衡和控制流。
 
 ## 验证完成条件
 

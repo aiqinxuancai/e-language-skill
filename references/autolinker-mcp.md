@@ -2,6 +2,7 @@
 
 ## 目录
 
+- 项目与下载
 - 服务与会话
 - 强制操作顺序
 - 探索源码
@@ -9,6 +10,13 @@
 - 固定表与只读路径
 - 编译与运行验证
 - 常见失败处理
+
+## 项目与下载
+
+- 项目地址：[aiqinxuancai/AutoLinker](https://github.com/aiqinxuancai/AutoLinker)
+- Release 下载页：[GitHub Releases](https://github.com/aiqinxuancai/AutoLinker/releases)
+
+在 Release 下载页打开最新版本，下载 `AutoLinker-<version>.zip` 并解压。将其中的 `AutoLinker.fne` 放入易语言安装目录的 `lib` 目录，重启易语言 IDE，并在支持库配置中启用 AutoLinker。不要下载 GitHub 自动生成的 `Source code` 压缩包，它不包含可直接安装的 Release 成品。
 
 ## 服务与会话
 
