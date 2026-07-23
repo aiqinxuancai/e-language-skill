@@ -1,6 +1,6 @@
 ---
 name: e-language
-description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
+description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
 ---
 
 # 易语言开发
@@ -37,9 +37,11 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 - [declarations-and-text-format.md](references/declarations-and-text-format.md)：程序集、子程序、变量、参数、常量、DLL、自定义数据类型的固定字段。
 - [patterns.md](references/patterns.md)：可复用的正确示例与反例。
 
-涉及窗口、组件事件、类、Win32 API、DLL、内存或回调时，再完整阅读 [windows-and-interop.md](references/windows-and-interop.md)。
+涉及窗口、组件事件、类、Win32 API、DLL、内存或回调时，再完整阅读 [windows-and-interop.md](references/windows-and-interop.md)。使用 `UpdateLayeredWindow`、32 位 `DIBSection`、GDI/GDI+ 绘图、预乘 alpha 或透明窗口时，必须按该参考中的分层窗口与画板流程检查样式、像素格式、资源所有权和清理顺序。
 
 涉及 `置入代码`、内嵌汇编、机器码字节集、寄存器或栈帧时，必须完整阅读 [embedded-machine-code.md](references/embedded-machine-code.md)，并同时读取 [windows-and-interop.md](references/windows-and-interop.md)。先确认编译器、后端、目标位数和实际 ABI，再生成或修改机器码；不得照抄未反汇编验证的十进制字节。
+
+涉及第三方类回调模块、类方法回调、运行时动态回调跳板或可执行内存时，必须同时完整阅读上述两份参考。把历史模块视为经典 Win32/x86 ABI 的案例，不把其对象布局、方法序号、栈偏移或机器码当作跨版本语言保证。
 
 ### 排错、优化、审查或迁移
 
