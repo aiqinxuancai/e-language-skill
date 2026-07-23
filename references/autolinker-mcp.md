@@ -29,6 +29,8 @@ AutoLinker 无法创建或修改原生窗体（易语言窗口界面）。`src/*
 
 AutoLinker 在易语言 IDE 中启动本地 Streamable HTTP MCP 服务，通常为 `http://127.0.0.1:19207/mcp`，端口占用时可能顺延。它操作当前 IDE 内存工程，而不是直接解析磁盘 `.e` 文件。
 
+这里的限制只针对 MCP 源码读写工具。需要从终端或 Agent 命令执行工具编译磁盘上的其他 `.e` 文件时，使用独立的 [AutoLinker 无头命令行编译](autolinker-headless-compile.md) 工作流；它会为目标文件启动新的 IDE 实例，不需要把该文件先切换为当前 MCP 工程。
+
 每个外部 MCP 会话在首次源码读写前必须成功调用 `refresh_workspace_mirror`。镜像由 e-packager 从 IDE 当前状态构建，包含未保存修改。不要把旧会话的路径、哈希或分页代次用于新会话。
 
 ## 强制操作顺序

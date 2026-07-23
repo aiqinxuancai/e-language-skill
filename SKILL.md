@@ -1,6 +1,6 @@
 ---
 name: e-language
-description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
+description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, AutoLinker headless command-line compilation of arbitrary disk .e files, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
 ---
 
 # 易语言开发
@@ -9,7 +9,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 把易语言项目当作由 IDE 管理的结构化工程，不要当作可任意改写的普通文本仓库。
 
-1. 先识别工作模式：AutoLinker MCP 真实 IDE、e-packager 解包目录、只读代码片段，或语言迁移任务。
+1. 先识别工作模式：AutoLinker MCP 真实 IDE、AutoLinker 无头编译磁盘 `.e`、e-packager 解包目录、只读代码片段，或语言迁移任务。
 2. 先读取实际源码、依赖公开接口和项目规范，再推导修改；不要凭其他语言经验补全易语言命令。
 3. 区分语言结构与支持库命令：`.子程序`、`.如果` 等是语言结构；`取文本长度` 等通常来自核心或第三方支持库，签名必须从当前工程的 `elib/`、`ecom/`、`header/` 或工具搜索结果确认。
 4. 优先做最小、局部、可验证的修改。保留页面类型、声明槽位、事件绑定、缩进、注释和未涉及的代码。
@@ -20,6 +20,10 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 ### AutoLinker MCP 连接到已打开的 IDE
 
 必须完整阅读 [autolinker-mcp.md](references/autolinker-mcp.md)，并按其刷新、探索、真实页读取、CAS 写入和编译流程操作。
+
+### AutoLinker 无头编译磁盘 `.e`
+
+需要在终端、CI 或 Agent 的 `exec_command`、`shell_command` 等命令执行工具中编译指定磁盘 `.e` 文件时，必须完整阅读 [autolinker-headless-compile.md](references/autolinker-headless-compile.md)。直接调用目标 `e.exe` 的 `--autolinker-headless-compile` 参数；仅在需要处理 AutoLinker 加载前的启动弹窗时使用可选的 `AutoLinkerTest.exe` 启动器。不要求先连接当前工程的 MCP 会话。
 
 ### 使用 e-packager 第三方工具链
 
