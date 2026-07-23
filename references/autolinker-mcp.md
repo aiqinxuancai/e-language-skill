@@ -3,6 +3,7 @@
 ## 目录
 
 - 项目与下载
+- 能力边界
 - 服务与会话
 - 强制操作顺序
 - 探索源码
@@ -17,6 +18,12 @@
 - Release 下载页：[GitHub Releases](https://github.com/aiqinxuancai/AutoLinker/releases)
 
 在 Release 下载页打开最新版本，下载 `AutoLinker-<version>.zip` 并解压。将其中的 `AutoLinker.fne` 放入易语言安装目录的 `lib` 目录，重启易语言 IDE，并在支持库配置中启用 AutoLinker。不要下载 GitHub 自动生成的 `Source code` 压缩包，它不包含可直接安装的 Release 成品。
+
+## 能力边界
+
+AutoLinker 无法创建或修改原生窗体（易语言窗口界面）。`src/*.xml` 窗口界面定义只读，不能通过任何工具新增、删除或改动窗口、控件及其属性、布局、事件绑定；`add_new_file` 只能新建普通程序集或类，不能新增窗口。需要新增或调整窗口界面时，由用户在易语言 IDE 中手工完成后，再用 `refresh_workspace_mirror` 刷新镜像。
+
+工具能编辑的是窗口对应的程序集 `.txt`（事件与子程序代码）、可编辑固定表和普通程序集/类源码；界面结构本身仍由 IDE 掌管。
 
 ## 服务与会话
 
@@ -58,7 +65,7 @@ compile_with_output_path（实现任务或用户要求验证时）
 - `write_file`：大块修改或完整页面覆盖；`full_code` 必须基于完整真实页。
 - `diff_file`：只预览结构化差异，不写回。
 - `restore_file_snapshot`：使用快照回滚，先取得当前真实页哈希。
-- `add_new_file`：新建普通程序集或类，不用于新增窗口。
+- `add_new_file`：新建普通程序集或类，不能用于新增窗口（无法创建原生窗体）。
 
 外部调用 `edit_file`、`multi_edit_file`、`write_file`、`diff_file` 时必须传 `expected_base_hash`；恢复时传 `expected_current_hash`。哈希冲突表示 IDE 内容已变化，应重新读取真实页并重新生成修改，不能绕过 CAS。
 
@@ -67,7 +74,7 @@ compile_with_output_path（实现任务或用户要求验证时）
 ## 固定表与只读路径
 
 - 可编辑固定表：`src/.数据类型.txt`、`src/.DLL声明.txt`、`src/.全局变量.txt`，以及工具明确支持的常量表。
-- `src/*.xml` 是窗口界面定义，只读；编辑对应窗口程序集 `.txt`。
+- `src/*.xml` 是窗口界面定义，只读且无法创建或修改；只能编辑对应窗口程序集 `.txt`。新增或改动窗口、控件需用户在 IDE 中手工完成。
 - `ecom/`、`elib/`、`header/` 是依赖公开信息，只读。
 - 常量表可能含长文本和二进制资源。除非任务明确且工具确认支持，不整体覆盖。
 - 新增/移除模块或支持库只在用户明确要求时使用对应依赖工具。
