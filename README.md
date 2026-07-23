@@ -1,8 +1,8 @@
 # e-language skill
 
-> Agent skill for developing, editing, debugging and compiling 易语言 (Easy Programming Language / EPL) projects — covering AutoLinker MCP, e-packager text workspaces, and BlackMoon native compilation.
+> Agent skill for developing, editing, debugging and compiling 易语言 (Easy Programming Language / EPL) projects — covering AutoLinker MCP, e-packager text workspaces, BlackMoon native compilation, and Win32/GDI+ interoperability.
 
-面向 **易语言（e-language / EPL）** 工程的 AI Agent 技能包：帮助 Agent 正确地理解、生成、修改、审查、排错、编译易语言代码，避免把易语言当成普通文本仓库随意改写。
+面向 **易语言（e-language / EPL）** 工程的 AI Agent 技能包：帮助 Agent 正确地理解、生成、修改、审查、排错、编译易语言代码，并处理窗口组件、Win32/DLL、分层透明窗口、GDI/GDI+、原生回调和内嵌机器码等互操作任务，避免把易语言当成普通文本仓库随意改写。
 
 技能正文与全部参考文档均为中文，因为易语言本身以中文标识符和中文命令为主。
 
@@ -41,8 +41,8 @@ npx skills add aiqinxuancai/e-language-skill
 | `references/declarations-and-text-format.md` | 程序集/子程序/变量/参数/常量/DLL/自定义类型的固定字段格式 |
 | `references/patterns.md` | 可复用的正确示例与常见反例 |
 | `references/project-model.md` | 工程、易模块（`.ec`）、支持库（`.fne`）、页面与名称解析 |
-| `references/windows-and-interop.md` | 窗口/组件事件、Win32/DLL 声明、类型指针、编码、回调、线程 |
-| `references/embedded-machine-code.md` | `置入代码`、x86 机器码、栈帧/ABI、重定位边界与反汇编验证 |
+| `references/windows-and-interop.md` | 窗口/组件事件、Win32/DLL、分层透明窗口、GDI/GDI+ 画板、类方法回调与资源生命周期 |
+| `references/embedded-machine-code.md` | `置入代码`、x86 机器码、栈帧/ABI、动态回调跳板、可执行内存与反汇编验证 |
 | `references/engineering-and-debugging.md` | 需求分析、编译错误分类、运行期排错、审查、测试、语言迁移 |
 | `references/autolinker-mcp.md` | AutoLinker MCP 工作流：刷新镜像、真实页读取、CAS 写入、编译 |
 | `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
@@ -53,6 +53,8 @@ npx skills add aiqinxuancai/e-language-skill
 - 易语言以 Windows / x86 为主要目标；本技能不假设跨位数行为。
 - AutoLinker MCP 需要在易语言 IDE 中加载 `AutoLinker.fne` 后提供本地端口服务。
 - e-packager 是独立第三方工具，成功回包不等于代码能编译或运行。
+- 透明窗口、GDI/GDI+、动态回调和机器码均依赖实际目标位数、编译后端与 Win32 ABI，必须以最终产物和运行测试验证。
+- 从历史工程提炼的内容只保留匿名、可复用的技术机制；技能不收录第三方模块源码、机器码字节、模块名称、作者或其他识别信息。
 - 技能只提供方法论与格式约束，不内置编译器；最终正确性以真实 IDE 编译与运行为准。
 
 ## 相关项目
@@ -63,4 +65,3 @@ npx skills add aiqinxuancai/e-language-skill
 ## 许可证
 
 [MIT](LICENSE)
-
