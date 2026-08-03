@@ -36,15 +36,16 @@ npx skills add aiqinxuancai/e-language-skill
 
 | 文件 | 内容 |
 | --- | --- |
-| `SKILL.md` | 技能入口：核心原则、工作流选择、修改前检查、强制规则、验证条件 |
-| `references/language-basics.md` | 类型、字面量、表达式、调用、数组、控制流、子程序语义 |
+| `SKILL.md` | 技能入口：核心原则、工作流选择、程序入口、修改前检查、强制规则、验证条件 |
+| `references/language-basics.md` | 类型、字面量、表达式、调用、数组、控制流、子程序语义、程序入口（`_启动子程序` / `_启动窗口`） |
 | `references/declarations-and-text-format.md` | 程序集/子程序/变量/参数/常量/DLL/自定义类型的固定字段格式 |
 | `references/patterns.md` | 可复用的正确示例与常见反例 |
-| `references/project-model.md` | 工程、易模块（`.ec`）、支持库（`.fne`）、页面与名称解析 |
+| `references/project-model.md` | 工程、易模块（`.ec`）、支持库（`.fne`）、入口与输出类型、页面与名称解析 |
 | `references/windows-and-interop.md` | 窗口/组件事件、Win32/DLL、分层透明窗口、GDI/GDI+ 画板、类方法回调与资源生命周期 |
 | `references/embedded-machine-code.md` | `置入代码`、x86 机器码、栈帧/ABI、动态回调跳板、可执行内存与反汇编验证 |
 | `references/engineering-and-debugging.md` | 需求分析、编译错误分类、运行期排错、审查、测试、语言迁移 |
 | `references/autolinker-mcp.md` | AutoLinker MCP 工作流：刷新镜像、真实页读取、CAS 写入、编译 |
+| `references/autolinker-headless-compile.md` | AutoLinker 无头命令行编译磁盘 `.e`：参数、成功判定、控制台 EXE 验证 |
 | `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
 | `references/blackmoon.md` | 黑月编译与黑月界面类：RC 资源、原生窗口、DLL、排错 |
 

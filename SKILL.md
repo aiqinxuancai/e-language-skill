@@ -1,6 +1,6 @@
 ---
 name: e-language
-description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, e-packager src/*.txt or window XML, AutoLinker MCP tools, AutoLinker headless command-line compilation of arbitrary disk .e files, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
+description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, program entry points (_启动子程序 / _启动窗口), 标准输出 console verification, e-packager src/*.txt or window XML, AutoLinker MCP tools, AutoLinker headless command-line compilation of arbitrary disk .e files, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
 ---
 
 # 易语言开发
@@ -59,7 +59,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 执行修改前确认以下事实：
 
-- 当前项目类型、目标位数和入口点。
+- 当前项目类型、目标位数和入口点（见下节「程序入口」）。
 - 目标页是普通程序集、窗口程序集、类、固定表还是只读依赖。
 - 子程序或事件所在页面，以及同名项是否已存在。
 - 被调用命令来自核心库、支持库、易模块还是当前工程；确认其参数顺序、可空/参考/数组属性和返回类型。
@@ -67,6 +67,16 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 - 是否存在项目级 `AGENTS.md`、同名 `.AGENTS.md` 或用户约束。
 
 信息不足时继续读取或搜索，不要以猜测填补影响正确性的事实。
+
+## 程序入口
+
+`_启动子程序` 是易语言的标准入口，相当于 C/C++ 的 `main`，写在普通程序集中。但它不一定是实际入口：
+
+- 工程中存在名为 `_启动窗口` 的窗口时（IDE 新建窗口程序的默认状态），程序直接优先载入该窗口并**无视 `_启动子程序`**。
+- 要改为代码入口，需把 `_启动窗口` 改名，新增 `_启动子程序`，并在其中显式调用 `载入 (窗口, , 假)`。
+- 易模块（`.ec`）也可包含 `_启动子程序`；被主工程引用时一般不执行，把模块工程显式编译为控制台 EXE 时会执行，可用于模块自测。DLL 另有入口约定。
+
+判断入口时先查 `_启动窗口`，再查 `_启动子程序`，不要只看后者是否存在。需要验证语法、支持库签名或某段逻辑的实际行为时，在 `_启动子程序` 中调用待验证子程序并用 `标准输出` 打印结果，显式编译为控制台 EXE（必要时静态编译）后运行产物；不要依赖 `auto` 目标，窗口 EXE 下看不到 `标准输出`。验证用入口代码属于调试脚手架，完成后还原或明确告知用户。细节见 [language-basics.md](references/language-basics.md) 的「程序入口」。
 
 ## 生成代码的强制规则
 
@@ -92,6 +102,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 2. 确认修改没有破坏窗口事件、类公开性、DLL 参数、资源常量或依赖边界。
 3. 使用可用的差异预览或结构校验工具。
 4. 对实现类任务执行与项目类型匹配的编译；读取完整编译输出，修正根因后重试。
-5. 涉及运行期行为、线程、窗口消息、文件/网络、内存和 DLL 时，补充真实场景测试。
+5. 需要观察实际运行结果时，在 `_启动子程序` 中调用待验证逻辑并用 `标准输出` 输出，显式编译为控制台 EXE 后运行产物；易模块同样显式编译为控制台 EXE 而不是模块。
+6. 涉及运行期行为、线程、窗口消息、文件/网络、内存和 DLL 时，补充真实场景测试。
 
 只有源码写入成功且所需验证通过，才宣告完成；无法使用 IDE、依赖或编译器时，明确报告未验证部分。
