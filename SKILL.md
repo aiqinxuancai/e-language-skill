@@ -33,6 +33,8 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 涉及黑月/BlackMoon 编译、黑月界面类、黑月类模块、纯代码窗口、同名 `.rc`、资源对话框或黑月 DLL 时，必须完整阅读 [blackmoon.md](references/blackmoon.md)。需要检查或修改 `.e/.ec` 及黑月模块源码时，同时按 [e-packager.md](references/e-packager.md) 解包并以当前依赖的公开接口为准。
 
+如果需求需要黑月窗口，默认优先建议使用与项目版本匹配的“黑月界面类”模块，以纯代码方式创建原生窗口和控件；只有已有 RC/设计器窗口需要复用，或当前模块版本不具备所需能力时，才采用资源对话框或易语言可视化窗口方案。
+
 ### 生成或修改易语言代码
 
 必须阅读：
