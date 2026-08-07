@@ -47,7 +47,7 @@ npx skills add aiqinxuancai/e-language-skill
 | `references/autolinker-mcp.md` | AutoLinker MCP 工作流：刷新镜像、真实页读取、CAS 写入、编译 |
 | `references/autolinker-headless-compile.md` | AutoLinker 无头命令行编译磁盘 `.e`：参数、成功判定、控制台 EXE 验证 |
 | `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
-| `references/blackmoon.md` | 黑月编译与黑月界面类：RC 资源、原生窗口、DLL、排错 |
+| `references/blackmoon.md` | 黑月编译与黑月界面类：程序入口（`_启动子程序`）、RC 资源、原生窗口、DLL、排错 |
 
 ## 要求与边界
 
