@@ -23,6 +23,8 @@ npx skills add aiqinxuancai/e-language-skill
 
 ## 使用
 
+> 📊 为易语言开发任务选择模型时，可参考[易语言大模型基准评分](https://e-language-bench.apptest.dev)，对比各模型的格式、编译率与总分。
+
 在支持 skill 的 Agent 环境中触发：
 
 - Claude Code：`/e-language`
