@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-直接给已安装 AutoLinker 的易语言 `e.exe` 传入无头编译参数，从 PowerShell、CI 或 Agent 的 `exec_command`、`shell_command` 等命令执行工具编译指定磁盘 `.e` 文件。不需要 `AutoLinkerTest.exe`，也不需要已有 MCP 会话。
+直接给已安装 AutoLinker 的易语言 `e.exe` 传入无头编译参数，从 PowerShell、CI 或 Agent 的 `exec_command`、`shell_command` 等命令执行工具编译指定磁盘 `.e` 文件。不需要已有 MCP 会话；`AutoLinkerTest.exe` 是处理早期启动弹窗和同一工程并发协调的可选启动器。
 
 该流程会为目标 `.e` 启动独立 IDE 实例，默认隐藏窗口，调用 `compile_with_output_path`，写出结构化 JSON，然后退出该实例；不改变其他已打开 IDE 实例的当前工程。它仍依赖真实易语言 IDE 和已加载的 `AutoLinker.fne`，不是脱离 IDE 的独立编译器。
 
@@ -11,7 +11,9 @@
 1. 把包含无头编译功能的 `AutoLinker.fne` 安装到目标易语言目录的 `lib`，重启 IDE 并启用该支持库。
 2. 确认目标 `e.exe` 和输入 `.e` 存在，提前创建输出目录和结果目录。
 3. 优先使用绝对路径。可用 `cmd /c ftype E.Document` 查询当前 `.e` 文件关联的 IDE 路径，但仍要确认该 IDE 安装了正确版本的 AutoLinker。
-4. 每个任务使用唯一的输出路径和 `--autolinker-result` 路径。直接调用不经过共享的 `headless_compile_request.json`；并行任务仍会覆盖同一易语言目录下的默认 `headless_compile_last.json`，因此不要用默认文件区分并行结果。
+4. 每个任务使用唯一的输出路径和 `--autolinker-result` 路径。显式命令行请求不依赖共享的
+   `headless_compile_request.json`；所有任务仍会原子更新同一易语言目录下的
+   `AutoLinker/Log/headless_compile_last.json`，因此不能用它区分并行结果。
 
 ## 直接调用 `e.exe`
 
@@ -25,6 +27,14 @@ e.exe <input.e> --autolinker-headless-compile \
   --autolinker-startup-timeout <seconds> \
   [--autolinker-static]
 ```
+
+请求标记也接受 `--autolinker-compile`。常用别名包括：输出路径
+`--autolinker-output-path`、项目上下文 `--autolinker-project-source-path`、静态编译
+`--autolinker-static-compile` / `--autolinker-no-static`、结果路径
+`--autolinker-result-path`，以及启动超时 `--autolinker-startup-timeout-seconds`。
+窗口和生命周期可用 `--autolinker-show-window`、`--autolinker-hide-window`、
+`--autolinker-no-exit` / `--autolinker-keep-open`、`--autolinker-exit` 控制。
+自动化通常保持默认的隐藏窗口和编译后退出。
 
 在 PowerShell 或 Agent 命令工具中调用：
 
@@ -54,9 +64,10 @@ if ($compileExit -ne 0 -or -not $compileResult.ok) {
 
 可把整段 PowerShell 直接交给 `exec_command`、`shell_command` 或等价终端工具。外层命令超时必须覆盖 IDE 启动等待和实际编译时间；`--autolinker-startup-timeout 120` 时建议至少给外层 180 秒。若外层先超时，先检查指定结果 JSON 和目标 IDE 进程，不要立即重复编译。
 
-始终显式传 `--autolinker-result`。未传时只会写入易语言目录下的 `AutoLinker/Log/headless_compile_last.json`，不适合作为多个自动化任务的稳定结果地址。
-
-默认会隐藏 IDE 并在完成后退出。只有排查界面或弹窗时才传 `--autolinker-show-window`；自动化编译不要传 `--autolinker-no-exit` 或 `--autolinker-keep-open`。
+推荐显式传 `--autolinker-result`。直接调用未传时会按输出路径和调用 ID 生成唯一结果文件：
+`<output>.headless.<invocation-id>.json`；没有输出路径时则写入
+`AutoLinker/Log/headless_compile_<invocation-id>.json`。无论是否显式指定，最近结果还会写入
+`AutoLinker/Log/headless_compile_last.json`，后者不适合作为多个自动化任务的稳定结果地址。
 
 ## 目标与静态编译
 
@@ -104,10 +115,11 @@ if ($compileExit -ne 0 -or -not $compileResult.ok) {
 
 ## 可选启动器
 
-`AutoLinkerTest.exe headless-compile` 不是无头编译的必要组件。它是直接调用之外的包装层，会先写 `AutoLinker/Log/headless_compile_request.json`，再启动 `e.exe`，并尝试捕获 AutoLinker 加载前的早期弹窗。只有目标环境确实存在这类弹窗，或调用方需要启动器附加的弹窗信息时才使用。
+`AutoLinkerTest.exe headless-compile` 是直接调用之外的包装层，会通过命令行启动 `e.exe`，同时尝试捕获 AutoLinker 加载前的早期弹窗。它还按规范化后的项目路径建立命名互斥体：同一 `.e` 工程的启动器任务串行，不同工程可以并行。没有显式 `--result` 时，启动器生成唯一的
+`<output>.headless.<invocation-id>.json`，并额外更新兼容文件 `<output>.headless.json`；有显式结果路径时只写指定结果和 AutoLinker 最近结果。
 
 ```text
 AutoLinkerTest.exe headless-compile <e.exe> <input.e> <output> [--target auto|win_exe|win_console_exe|win_dll|ecom] [--static] [--result path] [--timeout seconds]
 ```
 
-官方 Release ZIP 当前只打包 `AutoLinker.fne`，不保证包含 `AutoLinkerTest.exe`；启动器通常来自匹配版本源码的 `bin/fne_release` 或自行构建。由于同一易语言安装目录的启动器任务共用请求文件，使用启动器时必须串行调用。
+官方 Release ZIP 当前只打包 `AutoLinker.fne`，不保证包含 `AutoLinkerTest.exe`；启动器通常来自匹配版本源码的 `bin/fne_release` 或自行构建。启动器会把捕获到的启动/IDE 弹窗附加到结果 JSON；直接调用不提供同样的早期弹窗捕获。

@@ -8,7 +8,9 @@
 
 ## 覆盖的工作模式
 
-- **AutoLinker MCP**：连接到已打开的易语言 IDE，通过 MCP 工具读写「当前 IDE 内存工程」。
+- **AutoLinker MCP**：连接到已打开的易语言 IDE，通过 MCP 工具读写「当前 IDE 内存工程」，并支持外部 `.e/.ec` 参考解包。
+- **AutoLinker 项目配置编译**：在 IDE 中为同一工程维护多个输出目标、静态编译及 PowerShell 前后置动作。
+- **AutoLinker 内置功能**：AI 对话、图片/计划/目标模式、AI SKILL、工程规范和编译相关设置。
 - **e-packager**：用第三方工具把二进制 `.e/.ec` 解包为可读文本工作区，编辑后回包。
 - **只读代码片段 / 语言迁移**：无 IDE、无工具时的纯代码理解与跨语言迁移。
 - **BlackMoon（黑月）**：黑月编译后端与黑月界面类的原生 Win32 编译、RC 资源与窗口创建。
@@ -46,8 +48,10 @@ npx skills add aiqinxuancai/e-language-skill
 | `references/windows-and-interop.md` | 窗口/组件事件、Win32/DLL、分层透明窗口、GDI/GDI+ 画板、类方法回调与资源生命周期 |
 | `references/embedded-machine-code.md` | `置入代码`、x86 机器码、栈帧/ABI、动态回调跳板、可执行内存与反汇编验证 |
 | `references/engineering-and-debugging.md` | 需求分析、编译错误分类、运行期排错、审查、测试、语言迁移 |
-| `references/autolinker-mcp.md` | AutoLinker MCP 工作流：刷新镜像、真实页读取、CAS 写入、编译 |
-| `references/autolinker-headless-compile.md` | AutoLinker 无头命令行编译磁盘 `.e`：参数、成功判定、控制台 EXE 验证 |
+| `references/autolinker-mcp.md` | AutoLinker MCP 工作流：多实例路由、刷新镜像、外部参考解包、真实页读取、CAS 写入和编译 |
+| `references/autolinker-features.md` | AutoLinker 内置 AI、AI SKILL、工程规范、链接器/EC 设置和运行目录 |
+| `references/autolinker-project-build.md` | AutoLinker 项目级编译配置：设置页、`*.autolinker.json`、变量和按配置编译 |
+| `references/autolinker-headless-compile.md` | AutoLinker 无头命令行编译磁盘 `.e`：参数、结果文件、并发、成功判定和控制台 EXE 验证 |
 | `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
 | `references/blackmoon.md` | 黑月编译与黑月界面类：程序入口（`_启动子程序`）、RC 资源、原生窗口、DLL、排错 |
 
