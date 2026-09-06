@@ -1,6 +1,6 @@
 ---
 name: e-language
-description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, program entry points (_启动子程序 / _启动窗口), 标准输出 console verification, e-packager src/*.txt or window XML, AutoLinker MCP tools, AutoLinker project build configurations, AutoLinker headless command-line compilation of arbitrary disk .e files, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
+description: Comprehensive Easy Language (EPL/易语言) project development guidance for understanding, generating, editing, reviewing, debugging, compiling, and migrating .e/.ec projects and their unpacked text workspaces. Use when working with 易语言 syntax, program entry points (_启动子程序 / _启动窗口), 标准输出 console verification, e-packager src/*.txt or window XML, AutoLinker MCP tools, AutoLinker project build configurations, AutoLinker headless command-line compilation of arbitrary disk .e files, assemblies/classes/subroutines, modules and support libraries, BlackMoon/黑月 compilation, 黑月界面类/黑月类模块, Masonry 约束布局, RC resources, pure-code Win32 UI, Windows components/events, DLL declarations, custom data types, class-method callbacks and dynamic x86 callback trampolines, layered windows, GDI/GDI+ drawing, 置入代码 or embedded x86 machine code/assembly, build errors, or conversions between 易语言 and other languages.
 ---
 
 # 易语言开发
@@ -42,11 +42,11 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 ### 使用黑月编译或黑月界面类
 
-涉及黑月/BlackMoon 编译、黑月界面类、黑月类模块、纯代码窗口、同名 `.rc`、资源对话框或黑月 DLL 时，必须完整阅读 [blackmoon.md](references/blackmoon.md)。需要检查或修改 `.e/.ec` 及黑月模块源码时，同时按 [e-packager.md](references/e-packager.md) 解包并以当前依赖的公开接口为准。
+涉及黑月/BlackMoon 编译、黑月界面类、黑月类模块、Masonry 约束布局、纯代码窗口、同名 `.rc`、资源对话框或黑月 DLL 时，先读取 [blackmoon.md](references/blackmoon.md) 的“AI 快速路由”，再按任务分支读取对应小节；只有跨越多个分支或需要全局排错时才通读全文。涉及窗口、控件事件、Win32、内存或 DLL 互操作时，再读取 [windows-and-interop.md](references/windows-and-interop.md)。需要检查或修改 `.e/.ec` 及黑月模块源码时，同时按 [e-packager.md](references/e-packager.md) 解包并以当前依赖的公开接口为准。
 
-如果需求需要黑月窗口，默认优先建议使用与项目版本匹配的“黑月界面类”模块，以纯代码方式创建原生窗口和控件；只有已有 RC/设计器窗口需要复用，或当前模块版本不具备所需能力时，才采用资源对话框或易语言可视化窗口方案。
+窗口方案按工程现状选择：新建原生窗口优先使用匹配版本的“黑月界面类”纯代码方案；已有 RC/设计器资源则继续使用资源方案；复用易语言可视化窗口时不引入 `应用程序类.运行`。具体分支见 `blackmoon.md` 的“AI 快速路由”。
 
-黑月界面类的启动位置是普通程序集中的 `_启动子程序`：新建 Windows 窗口程序，删除默认的 `_启动窗口`，在任意程序集手动新增 `_启动子程序`，并在其中初始化“应用程序类”并调用其运行方法。绝对不要在 `__启动窗口_创建完毕` 等易语言可视化窗口事件中初始化应用程序类——那相当于在一个原生窗口里再建一套消息循环，是完全错误的写法。
+黑月界面类的代码入口是普通程序集中的 `_启动子程序`：删除或改名默认的 `_启动窗口`，在 `_启动子程序` 中初始化“应用程序类”并调用运行方法。禁止在 `__启动窗口_创建完毕` 等易语言可视化窗口事件中初始化应用程序类或嵌套消息循环。
 
 ### 生成或修改易语言代码
 
@@ -65,10 +65,6 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 ### 排错、优化、审查或迁移
 
 必须阅读 [engineering-and-debugging.md](references/engineering-and-debugging.md)。迁移时还要读取语言与项目模型参考，以区分语言语义、支持库行为、UI 事件和平台互操作边界。
-
-### 涉及黑月编译或黑月界面类
-
-当工程依赖黑月界面类、黑月类模块、黑月核心库等，或需要用黑月后端编译原生 Win32 EXE/DLL、创建 RC 资源与从资源/代码创建窗口时，必须完整阅读 [blackmoon.md](references/blackmoon.md)。黑月是与普通编译、静态编译不同的 x86 本机编译与链接后端，相关模块存在多个不兼容代际；先按其证据优先级识别 API 家族和版本，再生成代码，不要用普通编译结果代替黑月编译验证。窗口、控件事件和 DLL 互操作细节另读 [windows-and-interop.md](references/windows-and-interop.md)。
 
 ## 修改前检查
 
