@@ -11,7 +11,7 @@
 - **AutoLinker MCP**：连接到已打开的易语言 IDE，通过 MCP 工具读写「当前 IDE 内存工程」，并支持外部 `.e/.ec` 参考解包。
 - **AutoLinker 项目配置编译**：在 IDE 中为同一工程维护多个输出目标、静态编译及 PowerShell 前后置动作。
 - **AutoLinker 内置功能**：AI 对话、图片/计划/目标模式、AI SKILL、工程规范和编译相关设置。
-- **e-packager**：用第三方工具把二进制 `.e/.ec` 解包为可读文本工作区，编辑后回包。
+- **e-packager**：用第三方工具把二进制 `.e/.ec` 解包为可读文本工作区，编辑后回包，支持窗口事件/属性编辑、分级验证及 IDE 编译检查；直接编译为试验性功能，仅按明确需求使用。
 - **只读代码片段 / 语言迁移**：无 IDE、无工具时的纯代码理解与跨语言迁移。
 - **BlackMoon（黑月）**：黑月编译后端与黑月界面类的原生 Win32 编译、RC 资源与窗口创建。
 
@@ -52,7 +52,7 @@ npx skills add aiqinxuancai/e-language-skill
 | `references/autolinker-features.md` | AutoLinker 内置 AI、AI SKILL、工程规范、链接器/EC 设置和运行目录 |
 | `references/autolinker-project-build.md` | AutoLinker 项目级编译配置：设置页、`*.autolinker.json`、变量和按配置编译 |
 | `references/autolinker-headless-compile.md` | AutoLinker 无头命令行编译磁盘 `.e`：参数、结果文件、并发、成功判定和控制台 EXE 验证 |
-| `references/e-packager.md` | e-packager 解包/回包/依赖资源更新/一致性校验 |
+| `references/e-packager.md` | e-packager 解包/回包/窗口 XML/依赖资源更新/分级验证/编译检查/试验性直接编译 |
 | `references/blackmoon.md` | 黑月编译与黑月界面类：AI 快速路由、程序入口（`_启动子程序`）、RC 资源、原生窗口、Masonry 约束布局、DLL、排错 |
 
 ## 要求与边界

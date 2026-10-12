@@ -38,7 +38,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 ### 使用 e-packager 第三方工具链
 
-必须完整阅读 [e-packager.md](references/e-packager.md)，按其解包、文本工作区、依赖/资源更新、回包和一致性校验流程操作。e-packager 是独立第三方工具，不是易语言原生工程机制；理解 `.e/.ec`、模块与支持库语义时另读 [project-model.md](references/project-model.md)，编辑文本声明时另读 [declarations-and-text-format.md](references/declarations-and-text-format.md)。
+必须完整阅读 [e-packager.md](references/e-packager.md)，按其解包、文本工作区、依赖/资源更新、窗口 XML 编辑、回包和分级验证流程操作。日常编译验证使用 IDE / AutoLinker 的 `compile-check` 或 `validate --level compile`；只有用户明确要求无 IDE 编译或 `compile` 时才使用试验性直接编译。e-packager 是独立第三方工具，不是易语言原生工程机制；理解 `.e/.ec`、模块与支持库语义时另读 [project-model.md](references/project-model.md)，编辑文本声明时另读 [declarations-and-text-format.md](references/declarations-and-text-format.md)。
 
 ### 使用黑月编译或黑月界面类
 
