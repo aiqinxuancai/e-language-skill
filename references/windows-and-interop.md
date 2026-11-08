@@ -20,10 +20,10 @@
 
 处理窗口任务时：
 
-1. 读取对应窗口代码页和 XML/组件信息；AutoLinker MCP 镜像 XML 只读，e-packager 工作区的 XML 编辑边界见 [e-packager.md](e-packager.md)。
+1. 读取对应窗口代码页和 XML/组件信息；AutoLinker MCP 的真实 XML 与事务编辑规则见 [autolinker-native-windows.md](autolinker-native-windows.md)，离线 e-packager 工作区的编辑边界见 [e-packager.md](e-packager.md)。
 2. 搜索控件实例名及已有事件。
 3. 查询组件所属支持库的公开接口。
-4. 使用 AutoLinker MCP 时只修改代码页，新增/删除控件或改变布局使用 IDE 设计器；使用 e-packager 时可按其支持范围编辑窗口 XML，并做回包、回读和实际编译验证。
+4. 使用 AutoLinker MCP 时，通过 XML 写工具或 `write_window` 修改布局、控件及事件；新增窗口或需原子同步事件源码时使用 `write_window.code_files`。不支持的版本或属性使用 IDE 设计器。离线 e-packager 工作区按其规则回包、回读和实际编译验证。
 
 ## 事件绑定
 
@@ -33,7 +33,7 @@
 .子程序 _按钮1_被单击
 ```
 
-事件绑定可能依赖内部事件索引而不只是名字。不要把事件移动到普通程序集、其他窗口或类；不要在未同步设计器元数据的情况下随意重命名控件或事件。使用 AutoLinker MCP 时，可以修改已有控件事件子程序的代码实现，但新增事件子程序不代表已经建立控件事件绑定；新增、删除或修改事件绑定必须由用户在易语言 IDE 中完成。可把通用逻辑提取到全局唯一命名的普通子程序，再从原事件中调用。
+事件绑定依赖窗口元数据与处理器签名，不只是名字。处理器必须留在窗口自己的程序集，新增子程序后还需同步 XML 绑定；AutoLinker 用 `write_window` 与 `code_files` 原子完成。每条事件绑定使用独立处理器，共用逻辑提取到普通子程序。控件改名、解绑和跨程序集引用按 [窗口事务规则](autolinker-native-windows.md) 处理，避免 IDE 按旧命名重新绑定。
 
 ## DLL 声明流程
 

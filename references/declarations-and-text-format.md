@@ -161,11 +161,12 @@ DLL 命令下的 `.参数` 仍是 4 个槽位、3 个结构逗号，但规范导
 - 图片、声音、长文本和任意二进制资源也可能作为资源常量存在。
 - e-packager 通常在 `image/list.json`、`audio/list.json` 等索引中管理二进制资源；使用其 `update --add-image/--add-audio` 流程，不要只复制文件而遗漏索引。
 - AutoLinker 的固定常量表可能包含无法可靠覆盖的长文本/二进制内容。除非明确需要并确认工具支持，优先避免整体重写常量表。
+- AutoLinker 本地图片/声音字节集通过 `list_resources` / `add_resource` / `delete_resource` 管理，以 `#名称` 引用；不要通过重写常量表或直接复制镜像文件替代资源工具，参数与刷新规则见 [autolinker-mcp.md](autolinker-mcp.md)。
 
 ## 格式保护规则
 
 - 保留中间空字段、参数空位、数组维数和说明。
 - 区分普通引号、中文弯引号与声明维数字段中的引号；不做全文件字符替换。
 - 不把 `.程序集变量` 当成 `.局部变量` 随意改写；IDE 桥接层可能内部转换，但外部 Agent 应使用工具要求的公开格式。
-- 不修改只读依赖导出或猜改封包元数据；e-packager 工作区的窗口 XML 按 [e-packager.md](e-packager.md) 的事件/属性规则编辑，AutoLinker MCP 镜像仍只读。
+- 不修改只读依赖导出或猜改封包元数据；离线工作区 XML 按 [e-packager.md](e-packager.md) 编辑，IDE 内存窗口按 [autolinker-native-windows.md](autolinker-native-windows.md) 经 MCP 事务提交，不直接修改镜像文件。
 - IDE 可能省略控制指令前导点、补空 `.否则/.默认` 或调整页头。比较业务变化时使用结构化差异/归一化结果，不以字节完全相同作为唯一标准。

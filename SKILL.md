@@ -21,6 +21,8 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 必须完整阅读 [autolinker-mcp.md](references/autolinker-mcp.md)，并按其刷新、探索、真实页读取、CAS 写入和编译流程操作。
 
+涉及原生窗口、控件布局或事件绑定时，再阅读 [autolinker-native-windows.md](references/autolinker-native-windows.md)：当前版本可通过 `write_window` 事务编辑 XML 并同步事件源码。图片/声音资源使用 MCP 资源工具；普通 EXE/DLL 编译可自动使用已安装的 EideCore 后端，具体边界见 MCP 参考。
+
 ### 使用 AutoLinker 内置功能和设置
 
 需要指导 AutoLinker 安装、内置 AI 对话、图片/计划/目标模式、AI SKILL、工程规范、链接器、EC
@@ -28,7 +30,7 @@ description: Comprehensive Easy Language (EPL/易语言) project development gui
 
 ### AutoLinker 无头编译磁盘 `.e`
 
-需要在终端、CI 或 Agent 的 `exec_command`、`shell_command` 等命令执行工具中编译指定磁盘 `.e` 文件时，必须完整阅读 [autolinker-headless-compile.md](references/autolinker-headless-compile.md)。直接调用目标 `e.exe` 的 `--autolinker-headless-compile` 参数；仅在需要处理 AutoLinker 加载前的启动弹窗时使用可选的 `AutoLinkerTest.exe` 启动器。不要求先连接当前工程的 MCP 会话。
+需要在终端、CI 或 Agent 的 `exec_command`、`shell_command` 等命令执行工具中编译指定磁盘 `.e` 文件时，必须完整阅读 [autolinker-headless-compile.md](references/autolinker-headless-compile.md)。可直接调用目标 `e.exe` 的 `--autolinker-headless-compile` 参数；需要启动弹窗处理或同一工程并发协调时，优先使用匹配版本的 `AutoLinkerTest.exe headless-compile` 启动器。不要求先连接当前工程的 MCP 会话。
 
 ### AutoLinker 项目级按配置编译
 

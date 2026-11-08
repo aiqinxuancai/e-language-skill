@@ -33,6 +33,8 @@
 
 删除最后一个配置时，AutoLinker 会删除这个旁路 JSON 文件。手工维护时保留 UTF-8 JSON、配置名称唯一，并先备份文件；优先通过设置页保存，避免写出设置页无法读取的字段。
 
+当前配置格式未持久化 `compiler` 或 `blackmoon_mode`，不要把 MCP 的黑月参数直接写入此 JSON 并期待生效；需要黑月时使用对应 MCP 或无头命令。省略 `static_compile` 时配置默认为 `false`，与 MCP EXE/DLL 默认静态不同。
+
 ## 目标、输出和变量
 
 `target` 可取 `auto`、`win_exe`、`win_console_exe`、`win_dll`、`ecom`。`ecom` 不支持静态编译；要运行模块中的测试入口，应选择 `win_console_exe`，而不是发布为 `ecom`。输出路径建议使用绝对路径或以 `{ProjectDir}` 开头，并让扩展名与目标匹配（`.exe`、`.dll`、`.ec`）。相对输出路径按项目目录解析。
@@ -52,6 +54,8 @@
 ## 执行语义和排错
 
 选择菜单后，AutoLinker 会先生成当前工程的快照，再启动一个独立、默认隐藏的 `e.exe` 实例执行无头编译。任务是异步提交的，菜单返回“已提交”不等于产物已经生成；应等待 IDE 输出中的“异步编译完成”，并检查输出文件及日志。快照代表点击菜单时的 IDE 内存状态，之后对原工程的修改不会改变已经排队的任务。
+
+该菜单路径仍通过 IDE 无头入口执行，不因安装 `EideCore.exe` 就切换为 MCP 的独立核心分支。
 
 每套配置使用独立输出路径，避免多个任务互相覆盖。若启动弹窗、缺少支持库或输出未更新，按 [autolinker-headless-compile.md](autolinker-headless-compile.md) 检查结果 JSON 和 `AutoLinker/Log`。
 

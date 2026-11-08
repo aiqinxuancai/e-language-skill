@@ -6,6 +6,8 @@
 
 该流程会为目标 `.e` 启动独立 IDE 实例，默认隐藏窗口，调用 `compile_with_output_path`，写出结构化 JSON，然后退出该实例；不改变其他已打开 IDE 实例的当前工程。它仍依赖真实易语言 IDE 和已加载的 `AutoLinker.fne`，不是脱离 IDE 的独立编译器。
 
+即使安装了 `tools/EideCore.exe`，此 `e.exe` 无头入口仍走原 IDE 编译。EideCore 自动后端只用于相应 AI/MCP 工具编译，见 [autolinker-mcp.md](autolinker-mcp.md)。
+
 ## 前提与发现
 
 1. 把包含无头编译功能的 `AutoLinker.fne` 安装到目标易语言目录的 `lib`，重启 IDE 并启用该支持库。
@@ -42,16 +44,22 @@ e.exe <input.e> --autolinker-headless-compile \
 $eExe = 'C:\path\to\e5.95.exe'
 $inputE = (Resolve-Path 'D:\project\demo.e').Path
 $output = 'D:\project\build\demo.exe'
-$resultPath = 'D:\project\build\demo.compile.json'
+$invocationId = [guid]::NewGuid().ToString('N')
+$resultPath = "D:\project\build\demo.$invocationId.compile.json"
 
 New-Item -ItemType Directory -Force -Path (Split-Path $output) | Out-Null
-& $eExe $inputE `
-  --autolinker-headless-compile `
-  --autolinker-output $output `
-  --autolinker-target auto `
-  --autolinker-result $resultPath `
-  --autolinker-startup-timeout 120
-$compileExit = $LASTEXITCODE
+$compileArgs = @(
+  ('"{0}"' -f $inputE)
+  '--autolinker-headless-compile'
+  '--autolinker-output', ('"{0}"' -f $output)
+  '--autolinker-target', 'auto'
+  '--autolinker-result', ('"{0}"' -f $resultPath)
+  '--autolinker-invocation-id', $invocationId
+  '--autolinker-startup-timeout', '120'
+)
+$compileProcess = Start-Process -FilePath $eExe -ArgumentList $compileArgs `
+  -WindowStyle Hidden -Wait -PassThru -ErrorAction Stop
+$compileExit = $compileProcess.ExitCode
 
 if (-not (Test-Path -LiteralPath $resultPath)) {
   throw "AutoLinker 未生成编译结果：$resultPath"
@@ -74,6 +82,19 @@ if ($compileExit -ne 0 -or -not $compileResult.ok) {
 - 默认使用 `--autolinker-target auto`，让 AutoLinker 根据工程类型解析为 `win_exe`、`win_console_exe`、`win_dll` 或 `ecom`。
 - 只有用户明确指定目标或 `auto` 无法正确解析时才手工传目标；输出扩展名应与目标匹配：EXE 用 `.exe`，DLL 用 `.dll`，模块用 `.ec`。
 - `--autolinker-static` 只用于 EXE/DLL，并且当前工程与 IDE 必须支持静态编译。模块目标不要传该参数。
+- 直接无头入口和启动器在未指定静态参数时默认非静态；不要套用 AI/MCP `compile_with_output_path` 的 EXE/DLL 默认静态规则。模块工程在无头入口中 `auto` 按原工程类型解析为 `ecom`，也不同于 MCP 的控制台测试默认值。
+
+## 黑月编译
+
+直接入口显式传编译器和模式：
+
+```text
+--autolinker-compiler blackmoon --autolinker-blackmoon-mode vcxx
+```
+
+模式为 `asm|cxx|vcxx`（汇编、C/C++、VC++）；单独传模式不会自动选择黑月。黑月调用完全省略 `--autolinker-static` 和 `--autolinker-no-static`，也不能通过环境/请求设置静态字段。只允许 EXE/DLL 工程，目标用 `auto` 或当前工程实际类型，不在黑月调用中转换目标类型。普通易语言编译省略黑月模式参数。
+
+启动器使用 `--blackmoon asm|cxx|vcxx`，不同时传 `--static`。必须有可用的 `BlackMoon.fne` 和所选编译配置；参数冲突或配置不可用时读取 `error` 与 `hint`，不要反复切换参数碰运气。编译临时配置受跨进程锁保护，成功判定也包括配置恢复结果。
 
 ## 用控制台 EXE 验证逻辑
 
@@ -119,7 +140,9 @@ if ($compileExit -ne 0 -or -not $compileResult.ok) {
 `<output>.headless.<invocation-id>.json`，并额外更新兼容文件 `<output>.headless.json`；有显式结果路径时只写指定结果和 AutoLinker 最近结果。
 
 ```text
-AutoLinkerTest.exe headless-compile <e.exe> <input.e> <output> [--target auto|win_exe|win_console_exe|win_dll|ecom] [--static] [--result path] [--timeout seconds]
+AutoLinkerTest.exe headless-compile <e.exe> <input.e> <output> [--target auto|win_exe|win_console_exe|win_dll|ecom] [--static] [--blackmoon asm|cxx|vcxx] [--result path] [--timeout seconds]
 ```
 
-官方 Release ZIP 当前只打包 `AutoLinker.fne`，不保证包含 `AutoLinkerTest.exe`；启动器通常来自匹配版本源码的 `bin/fne_release` 或自行构建。启动器会把捕获到的启动/IDE 弹窗附加到结果 JSON；直接调用不提供同样的早期弹窗捕获。
+仓库发布流程的 AutoLinker 主 ZIP 打包 `AutoLinker.fne`，EideCore 作为独立资产发布，不保证包含 `AutoLinkerTest.exe`；启动器通常来自匹配版本源码的 `bin/fne_release` 或自行构建。需要早期弹窗处理或同工程并发协调时优先使用启动器。启动器会把捕获到的启动/IDE 弹窗附加到结果 JSON；直接调用不提供同样的早期弹窗捕获与排队。
+
+维护依据：AutoLinker `src/HeadlessCompileRunner.cpp`、`AutoLinkerTest/AutoLinkerTest.cpp`、`docs/blackmoon-compile-verification.md` 和 `.github/workflows/msbuild.yml`（2026-11-08 本地源码）。
